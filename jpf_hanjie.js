@@ -53,17 +53,54 @@
       multi-dimensional array, puzzle.
 	
 */
+window.onload = init;
+
+
+function init() {
+   //insert the title for the first puzzle
+   document.getElementById("puzzleTitle").innerHTML = "Puzzle 1";
+
+   //insert the HTML code for the first puzzle table
+   document.getElementById("puzzle").innerHTML = drawPuzzle(puzzle1Hint, puzzle1Rating, puzzle1);
+
+   //add event handlers for the puzzle buttons
+   var puzzleButtons = document.getElementsByClassName("puzzles");
+   for (var i = 0; i < puzzleButtons.length; i++) {
+      puzzleButtons[i].onclick = swapPuzzle;
+   }
+}
+
+function swapPuzzle(e) {
+
+   // retieve the ID of the clicked button
+   var puzzleID = e.target.id;
+
+   //retrieve the value of the clicked button
+   var puzzleTitle = e.target.value;
+   document.getElementById("puzzleTitle").innerHTML = puzzleTitle;
+
+   //display the puzzle based on the value of the puzzleID variable
+   switch (puzzleID) {
+      case "puzzle1":
+         document.getElementById("puzzle").innerHTML = drawPuzzle(puzzle1Hint, puzzle1Rating, puzzle1);
+         break;
+      case "puzzle2":
+         document.getElementById("puzzle").innerHTML = drawPuzzle(puzzle2Hint, puzzle2Rating, puzzle2);
+         break;
+      default:
+         break;
+   }
+}
 
 
 
 
 
 
-         
 /* ================================================================= */
 
 function drawPuzzle(hint, rating, puzzle) {
-   
+
    /* Initial HTML String for the Hanjie Puzzle */
    var htmlString = "";
 
@@ -82,21 +119,21 @@ function drawPuzzle(hint, rating, puzzle) {
    var rowCount = [];
    var spaceCount;
    for (var i = 0; i < totalRows; i++) {
-      rowCount[i]="";
+      rowCount[i] = "";
       spaceCount = 0;
 
       for (var j = 0; j < totalCols; j++) {
          if (puzzle[i][j] === "#") {
             spaceCount++;
-            if (j === totalCols-1) {
+            if (j === totalCols - 1) {
                rowCount[i] += spaceCount + "&nbsp;&nbsp;";
             }
          } else {
             if (spaceCount > 0) {
                rowCount[i] += spaceCount + "&nbsp;&nbsp;";
                spaceCount = 0;
-            } 
-         }    
+            }
+         }
       }
 
    }
@@ -106,21 +143,21 @@ function drawPuzzle(hint, rating, puzzle) {
 
    var colCount = [];
    for (var j = 0; j < totalCols; j++) {
-      colCount[j]="";
+      colCount[j] = "";
       spaceCount = 0;
 
       for (var i = 0; i < totalRows; i++) {
          if (puzzle[i][j] === "#") {
             spaceCount++;
-            if (i === totalRows-1) {
+            if (i === totalRows - 1) {
                colCount[j] += spaceCount + "<br />";
             }
          } else {
             if (spaceCount > 0) {
                colCount[j] += spaceCount + "<br />";
                spaceCount = 0;
-            } 
-         }    
+            }
+         }
       }
 
    }
@@ -140,13 +177,12 @@ function drawPuzzle(hint, rating, puzzle) {
    htmlString += "</tr>";
 
    for (var i = 0; i < totalRows; i++) {
-      htmlString += "<tr><th class='rows'>&nbsp;" + rowCount[i]+"</th>";
+      htmlString += "<tr><th class='rows'>&nbsp;" + rowCount[i] + "</th>";
 
-      for (var j = 0; j<totalCols; j++) {
+      for (var j = 0; j < totalCols; j++) {
          if (puzzle[i][j] === "#") {
             htmlString += "<td  class='filled'></td>";
-         }
-         else {
+         } else {
             htmlString += "<td class='empty'></td>";
          }
       }
