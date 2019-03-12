@@ -71,42 +71,45 @@ function init() {
       puzzleButtons[i].onclick = swapPuzzle;
    }
    setupPuzzle();
+
+
+   //add an event listener for the mouseup event
+   document.addEventListener("mouseup", endBackground);
+
+   //add an event listener to Show Solution button
+   document.getElementById("solve").addEventListener("click", function () {
+      //remove the inline background color style from each cell
+      for (var i = 0; i < puzzleCells.length; i++) {
+         puzzleCells[i].style.backgroundColor = "";
+      }
+   });
 }
-
-//add an event listener for the mouseup event
-document.addEventListener("mouseup", endBackground);
-
-//add an event listener to Show Solution button
-document.getElementById("solve").addEventListener("click", function () {
-   //remove the inline background color style from each cell
-   for (var i = 0; i < puzzleCells.length; i++) {
-      puzzleCells[i].style.backgroundColor = "";
-   }
-});
 
 
 function swapPuzzle(e) {
+   if (confirm("You will lose all of your work on the puzzle! Continue?")) {
 
-   // retieve the ID of the clicked button
-   var puzzleID = e.target.id;
+      // retieve the ID of the clicked button
+      var puzzleID = e.target.id;
 
-   //retrieve the value of the clicked button
-   var puzzleTitle = e.target.value;
-   document.getElementById("puzzleTitle").innerHTML = puzzleTitle;
+      //retrieve the value of the clicked button
+      var puzzleTitle = e.target.value;
+      document.getElementById("puzzleTitle").innerHTML = puzzleTitle;
 
-   //display the puzzle based on the value of the puzzleID variable
-   switch (puzzleID) {
-      case "puzzle1":
-         document.getElementById("puzzle").innerHTML = drawPuzzle(puzzle1Hint, puzzle1Rating, puzzle1);
-         break;
-      case "puzzle2":
-         document.getElementById("puzzle").innerHTML = drawPuzzle(puzzle2Hint, puzzle2Rating, puzzle2);
-         break;
-      case "puzzle3":
-         document.getElementById("puzzle").innerHTML = drawPuzzle(puzzle3Hint, puzzle3Rating, puzzle3);
-         break;
+      //display the puzzle based on the value of the puzzleID variable
+      switch (puzzleID) {
+         case "puzzle1":
+            document.getElementById("puzzle").innerHTML = drawPuzzle(puzzle1Hint, puzzle1Rating, puzzle1);
+            break;
+         case "puzzle2":
+            document.getElementById("puzzle").innerHTML = drawPuzzle(puzzle2Hint, puzzle2Rating, puzzle2);
+            break;
+         case "puzzle3":
+            document.getElementById("puzzle").innerHTML = drawPuzzle(puzzle3Hint, puzzle3Rating, puzzle3);
+            break;
+      }
+      setupPuzzle();
    }
-   setupPuzzle();
 }
 
 function setupPuzzle() {
@@ -132,6 +135,37 @@ function setupPuzzle() {
          if (filled[i].style.backgroundColor === "rgb(255, 255, 255)") {
             filled[i].style.backgroundColor = "rgb(255, 211, 211)";
          }
+      }
+      //display incorrect gray cells in red
+      for (var i = 0; i < empty.length; i++) {
+         if (empty[i].style.backgroundColor === "rgb(101, 101, 101)") {
+            empty[i].style.backgroundColor = "rgb(255, 101, 101)";
+         }
+      }
+      //remove the hints after 0.5 seconds
+      setTimeout(
+         function () {
+            for (var i = 0; i < puzzleCells.length; i++) {
+               if (puzzleCells[i].style.backgroundColor === "rgb(255, 211, 211)") {
+                  puzzleCells[i].style.backgroundColor = "rgb(255, 255, 255)";
+               }
+               if (puzzleCells[i].style.backgroundColor === "rgb(255, 101, 101)") {
+                  puzzleCells[i].style.backgroundColor = "rgb(101, 101, 101)";
+               }
+            }
+         }, 500);
+   });
+   //check the puzzle solution
+   document.getElementById("hanjieGrid").addEventListener("mouseup", function () {
+      var solved = true;
+      for (var i = 0; i < puzzleCells.length; i++) {
+         if ((puzzleCells[i].className === "filled" && puzzleCells[i].style.backgroundColor !== "rgb(101, 101, 101)") || (puzzleCells[i].className === "empty" && puzzleCells[i].style.backgroundColor === "rgb(101, 101, 101)")) {
+            solved = false;
+            break;
+         }
+      }
+      if (solved) {
+         alert("You solved the PUZZLE!!!");
       }
    });
 }
