@@ -210,6 +210,7 @@ function endBackground() {
 
 
 
+
 /* ================================================================= */
 
 function drawPuzzle(hint, rating, puzzle) {
